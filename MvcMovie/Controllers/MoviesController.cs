@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcMovie.Data;
 using MvcMovie.Models;
@@ -12,17 +9,17 @@ namespace MvcMovie.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
 
         public MoviesController(ApplicationDbContext context)
         {
-            _context = context;    
+            this.context = context;    
         }
 
         // GET: Movies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Movie.ToListAsync());
+            return this.View(await this.context.Movie.ToListAsync());
         }
 
         // GET: Movies/Details/5
@@ -30,22 +27,22 @@ namespace MvcMovie.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            var movie = await _context.Movie.SingleOrDefaultAsync(m => m.Id == id);
+            var movie = await this.context.Movie.SingleOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return View(movie);
+            return this.View(movie);
         }
 
         // GET: Movies/Create
         public IActionResult Create()
         {
-            return View();
+            return this.View();
         }
 
         // POST: Movies/Create
@@ -55,13 +52,13 @@ namespace MvcMovie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Genre,Price,ReleaseDate,Title")] Movie movie)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _context.Add(movie);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                this.context.Add(movie);
+                await this.context.SaveChangesAsync();
+                return this.RedirectToAction("Index");
             }
-            return View(movie);
+            return this.View(movie);
         }
 
         // GET: Movies/Edit/5
@@ -69,15 +66,15 @@ namespace MvcMovie.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            var movie = await _context.Movie.SingleOrDefaultAsync(m => m.Id == id);
+            var movie = await this.context.Movie.SingleOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
-            return View(movie);
+            return this.View(movie);
         }
 
         // POST: Movies/Edit/5
@@ -89,30 +86,30 @@ namespace MvcMovie.Controllers
         {
             if (id != movie.Id)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(movie);
-                    await _context.SaveChangesAsync();
+                    this.context.Update(movie);
+                    await this.context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieExists(movie.Id))
+                    if (!this.MovieExists(movie.Id))
                     {
-                        return NotFound();
+                        return this.NotFound();
                     }
                     else
                     {
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return this.RedirectToAction("Index");
             }
-            return View(movie);
+            return this.View(movie);
         }
 
         // GET: Movies/Delete/5
@@ -120,16 +117,16 @@ namespace MvcMovie.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            var movie = await _context.Movie.SingleOrDefaultAsync(m => m.Id == id);
+            var movie = await this.context.Movie.SingleOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return View(movie);
+            return this.View(movie);
         }
 
         // POST: Movies/Delete/5
@@ -137,15 +134,15 @@ namespace MvcMovie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _context.Movie.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Movie.Remove(movie);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            var movie = await this.context.Movie.SingleOrDefaultAsync(m => m.Id == id);
+            this.context.Movie.Remove(movie);
+            await this.context.SaveChangesAsync();
+            return this.RedirectToAction("Index");
         }
 
         private bool MovieExists(int id)
         {
-            return _context.Movie.Any(e => e.Id == id);
+            return this.context.Movie.Any(e => e.Id == id);
         }
     }
 }
