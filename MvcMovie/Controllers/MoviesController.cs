@@ -7,7 +7,6 @@ namespace MvcMovie.Controllers
 	using Microsoft.EntityFrameworkCore;
 	using MvcMovie.Data;
 	using MvcMovie.Models;
-	using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 	public class MoviesController : Controller
 	{
@@ -78,7 +77,7 @@ namespace MvcMovie.Controllers
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Id,Genre,Price,ReleaseDate,Title")] Movie movie)
+		public async Task<IActionResult> Create([Bind("Id,Genre,Price,ReleaseDate,Title,Rating")] Movie movie)
 		{
 			if (this.ModelState.IsValid)
 			{
@@ -86,6 +85,7 @@ namespace MvcMovie.Controllers
 				await this.context.SaveChangesAsync();
 				return this.RedirectToAction("Index");
 			}
+
 			return this.View(movie);
 		}
 
@@ -102,6 +102,7 @@ namespace MvcMovie.Controllers
 			{
 				return this.NotFound();
 			}
+
 			return this.View(movie);
 		}
 
@@ -110,7 +111,7 @@ namespace MvcMovie.Controllers
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("Id,Genre,Price,ReleaseDate,Title")] Movie movie)
+		public async Task<IActionResult> Edit(int id, [Bind("Id,Genre,Price,ReleaseDate,Title,Rating")] Movie movie)
 		{
 			if (id != movie.Id)
 			{
@@ -135,8 +136,10 @@ namespace MvcMovie.Controllers
 						throw;
 					}
 				}
+
 				return this.RedirectToAction("Index");
 			}
+
 			return this.View(movie);
 		}
 
